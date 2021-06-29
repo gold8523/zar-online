@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Zar Marathon RPG",
   "scripts": {
+    "build:dev": "env NODE_ENV=development webpack",
+    "build": "env NODE_ENV=production webpack",
     "lint": "npx eslint src/**/*.js",
     "prettier": "npx prettier --write .",
-    "dev": "npx webpack serve",
+    "dev": "npx webpack serve --hot",
     "prepare": "husky install"
   },
   "repository": {

@@ -29,6 +29,8 @@
     "eslint-plugin-import": "^2.23.4",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
+    "husky": "^6.0.0",
+    "husky-init": "^6.1.1",
     "prettier": "^2.3.2",
     "prettier-quick": "0.0.5",
     "sass": "^1.35.1",
@@ -36,8 +38,7 @@
     "style-loader": "^3.0.0",
     "webpack": "^5.41.0",
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.2",
-    "husky": "^6.0.0"
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {}
 }

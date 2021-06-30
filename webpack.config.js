@@ -20,7 +20,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: [/node_modules/],
+        exclude: [/node_modules/, /\.ico$/],
       },
       {
         test: /\.scss$/,
@@ -31,12 +31,12 @@ module.exports = {
         ]
       },
       {
-        test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.ico$/],
+        test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
         use: [
           {
             loader: 'file-loader',
             options: {
-              name: '[name].[ext]?[hash]',
+              name: '[name].[ext]',
               outputPath: 'assets/',
 
             }

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Zar Marathon RPG",
   "scripts": {
+    "start": "node scripts/start.js",
     "build:dev": "env NODE_ENV=development webpack",
     "build": "env NODE_ENV=production webpack",
     "lint": "npx eslint src/**/*.js",
@@ -40,5 +41,8 @@
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@hapi/hapi": "^20.1.5",
+    "@hapi/inert": "^6.0.3"
+  }
 }

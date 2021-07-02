@@ -62,23 +62,50 @@ img.addEventListener('load', () => {
       switch (vector) {
         case 'Down':
           spriteRow = 0;
+
           move();
-          pY += 10;
+          
+          if (pY >= 550) {
+            pY = 550;
+          } else {
+            pY += 10;
+          }
+
           break;
         case 'Up':
           spriteRow = spriteH * 3;
+
           move();
-          pY -= 10;
+        
+          if (pY <= 0) {
+            pY = 0;
+          } else {
+            pY -= 10;
+          }
+
           break;
         case 'Left':
           spriteRow = spriteH;
+
           move();
-          pX -= 10;
+          
+          if (pX <= 0) {
+            pX = 0;
+          } else {
+            pX -= 10;
+          }
+
           break;
         case 'Right':
           spriteRow = spriteH * 2;
+
           move();
-          pX += 10;
+          
+          if (pX >= 560) {
+            pX = 560;
+          } else {
+            pX += 10;
+          }
           break;
         default:
           pX = 300;
@@ -90,5 +117,5 @@ img.addEventListener('load', () => {
     ctx.drawImage(img, cycle * spriteW, spriteRow, spriteW, spriteH, pX, pY, spriteW, spriteH);
   }, 100);
 });
-console.log('###: INIT :###');
+// console.log('###: INIT :###');
 // console.log('####');

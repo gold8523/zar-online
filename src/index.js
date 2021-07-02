@@ -8,8 +8,8 @@ const spriteH = 48;
 const shots = 3;
 let cycle = 0;
 let bottomPressed = false;
-let pX = 0;
-let pY = 0;
+let pX = 280;
+let pY = 280;
 let vector = null;
 let spriteRow = 0;
 
@@ -64,7 +64,7 @@ img.addEventListener('load', () => {
           spriteRow = 0;
 
           move();
-          
+
           if (pY >= 550) {
             pY = 550;
           } else {
@@ -76,7 +76,7 @@ img.addEventListener('load', () => {
           spriteRow = spriteH * 3;
 
           move();
-        
+
           if (pY <= 0) {
             pY = 0;
           } else {
@@ -88,7 +88,7 @@ img.addEventListener('load', () => {
           spriteRow = spriteH;
 
           move();
-          
+
           if (pX <= 0) {
             pX = 0;
           } else {
@@ -100,7 +100,7 @@ img.addEventListener('load', () => {
           spriteRow = spriteH * 2;
 
           move();
-          
+
           if (pX >= 560) {
             pX = 560;
           } else {

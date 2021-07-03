@@ -8,5 +8,12 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  rules: {},
+  rules: {
+    'prefer-destructuring': ['error', {
+      array: false,
+      object: false,
+    }, {
+      enforceForRenamedProperties: false,
+    }],
+  },
 };

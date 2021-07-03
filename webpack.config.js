@@ -27,8 +27,8 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
-          'sass-loader'
-        ]
+          'sass-loader',
+        ],
       },
       {
         test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
@@ -39,10 +39,10 @@ module.exports = {
               name: '[name].[ext]',
               outputPath: 'assets/',
 
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
@@ -54,7 +54,8 @@ module.exports = {
     port: 3000,
     overlay: true,
     open: true,
-    hot: true,
+    inline: true,
+    // hot: true,
     historyApiFallback: true,
   },
   devtool: NODE_ENV === 'development' ? 'source-map' : false,

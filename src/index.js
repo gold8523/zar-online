@@ -16,6 +16,34 @@ let spriteRow = 0;
 const img = document.createElement('img');
 img.src = DenWalk;
 
+function drawWhater() {
+  ctx.beginPath();
+  ctx.moveTo(100, 150);
+  ctx.bezierCurveTo(100, 150, 120, 140, 150, 150);
+  ctx.stroke();
+}
+
+function drawWhater1() {
+  ctx.beginPath();
+  ctx.moveTo(200, 250);
+  ctx.bezierCurveTo(200, 250, 220, 240, 250, 250);
+  ctx.stroke();
+}
+
+function drawWhater2() {
+  ctx.beginPath();
+  ctx.moveTo(200, 230);
+  ctx.bezierCurveTo(200, 230, 220, 220, 250, 230);
+  ctx.stroke();
+}
+
+function drawWhater3() {
+  ctx.beginPath();
+  ctx.moveTo(400, 150);
+  ctx.bezierCurveTo(400, 150, 420, 140, 450, 150);
+  ctx.stroke();
+}
+
 function keyDownHendler(e) {
   if (e.key === 'Down' || e.key === 'ArrowDown') {
     bottomPressed = true;
@@ -112,8 +140,11 @@ img.addEventListener('load', () => {
           pY = 300;
       }
     }
-
     ctx.clearRect(0, 0, 600, 600);
+    drawWhater();
+    drawWhater1();
+    drawWhater2();
+    drawWhater3();
     ctx.drawImage(img, cycle * spriteW, spriteRow, spriteW, spriteH, pX, pY, spriteW, spriteH);
   }, 100);
 });

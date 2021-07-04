@@ -73,7 +73,7 @@ function drawSand() {
 }
 
 function drawWather() {
-// const lingrad = ctx.createLinearGradient(400, 400, 400, 600);
+  // const lingrad = ctx.createLinearGradient(400, 400, 400, 600);
   lingrad.addColorStop(0.1, 'rgb(51, 204, 255, 0.4)');
   lingrad.addColorStop(0.6, 'rgb(19, 47, 171, 0.9');
 

@@ -3,6 +3,7 @@ import DenWalk from './assets/Male-5-Walk.png';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+const lingrad = ctx.createLinearGradient(400, 400, 400, 600);
 const spriteW = 48;
 const spriteH = 48;
 const shots = 3;
@@ -12,36 +13,72 @@ let pX = 280;
 let pY = 280;
 let vector = null;
 let spriteRow = 0;
+const waweX = 10;
+let waweY = 500;
 
 const img = document.createElement('img');
 img.src = DenWalk;
 
-function drawWhater() {
+// 100, 150, 120,  140,  150,  150
+// xs   ys   xs+20 ys-10 xs+50 ys
+function drawWawe(xStart, yStart) {
+  const checkX1 = xStart;
+  const checkY1 = yStart;
+  const checkX2 = xStart + 20;
+  const checkY2 = yStart - 10;
+  const xEnd = xStart + 50;
+  const yEnd = yStart;
+  ctx.strokeStyle = '#fff';
   ctx.beginPath();
-  ctx.moveTo(100, 150);
-  ctx.bezierCurveTo(100, 150, 120, 140, 150, 150);
+  ctx.moveTo(xStart, yStart);
+  ctx.bezierCurveTo(checkX1, checkY1, checkX2, checkY2, xEnd, yEnd);
   ctx.stroke();
 }
 
-function drawWhater1() {
-  ctx.beginPath();
-  ctx.moveTo(200, 250);
-  ctx.bezierCurveTo(200, 250, 220, 240, 250, 250);
-  ctx.stroke();
+function moveWawe() {
+  if (waweY > 400) {
+    for (let i = waweX; i < 600; i += 100) {
+      drawWawe(i, waweY);
+    }
+    for (let i = waweX + 50; i < 600; i += 100) {
+      drawWawe(i, waweY + 35);
+    }
+    for (let i = waweX + 30; i < 600; i += 100) {
+      drawWawe(i, waweY + 70);
+    }
+
+    for (let i = waweX; i < 600; i += 100) {
+      drawWawe(i, waweY + 140);
+    }
+
+    waweY -= 10;
+  } else {
+    waweY = 600;
+  }
 }
 
-function drawWhater2() {
-  ctx.beginPath();
-  ctx.moveTo(200, 230);
-  ctx.bezierCurveTo(200, 230, 220, 220, 250, 230);
-  ctx.stroke();
+function drawSand() {
+  for (let i = 0; i <= 600; i += 8) {
+    for (let j = 0; j <= 600; j += 8) {
+      if (i % 3 === 0) {
+        ctx.fillStyle = '#fcdd76';
+      } else {
+        ctx.fillStyle = '#ffff99';
+      }
+      ctx.beginPath();
+      ctx.arc(i, j, 8, 0, Math.PI * 2, false);
+      ctx.fill();
+    }
+  }
 }
 
-function drawWhater3() {
-  ctx.beginPath();
-  ctx.moveTo(400, 150);
-  ctx.bezierCurveTo(400, 150, 420, 140, 450, 150);
-  ctx.stroke();
+function drawWather() {
+// const lingrad = ctx.createLinearGradient(400, 400, 400, 600);
+  lingrad.addColorStop(0.1, 'rgb(51, 204, 255, 0.4)');
+  lingrad.addColorStop(0.6, 'rgb(19, 47, 171, 0.9');
+
+  ctx.fillStyle = lingrad;
+  ctx.fillRect(0, 400, 600, 600);
 }
 
 function keyDownHendler(e) {
@@ -141,10 +178,9 @@ img.addEventListener('load', () => {
       }
     }
     ctx.clearRect(0, 0, 600, 600);
-    drawWhater();
-    drawWhater1();
-    drawWhater2();
-    drawWhater3();
+    drawSand();
+    drawWather();
+    moveWawe();
     ctx.drawImage(img, cycle * spriteW, spriteRow, spriteW, spriteH, pX, pY, spriteW, spriteH);
   }, 100);
 });

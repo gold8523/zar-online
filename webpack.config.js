@@ -20,15 +20,15 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: [/node_modules/, /\.ico$/],
+        exclude: /node_modules/,
       },
       {
         test: /\.scss$/,
         use: [
           'style-loader',
           'css-loader',
-          'sass-loader'
-        ]
+          'sass-loader',
+        ],
       },
       {
         test: [/\.svg$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
@@ -39,10 +39,10 @@ module.exports = {
               name: '[name].[ext]',
               outputPath: 'assets/',
 
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
@@ -54,8 +54,12 @@ module.exports = {
     port: 3000,
     overlay: true,
     open: true,
-    hot: true,
+    // hot: true,
+    inline: true,
     historyApiFallback: true,
+    // headers: {
+    //   'Content-Security-Policy': 'default-src `self`',
+    // },
   },
   devtool: NODE_ENV === 'development' ? 'source-map' : false,
 };

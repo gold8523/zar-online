@@ -3,14 +3,16 @@ import DenWalk from './assets/Male-5-Walk.png';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+const width = canvas.width;
+const height = canvas.height;
 const lingrad = ctx.createLinearGradient(400, 400, 400, 600);
 const spriteW = 48;
 const spriteH = 48;
 const shots = 3;
 let cycle = 0;
 let bottomPressed = false;
-let pX = 280;
-let pY = 280;
+let pX = width / 2 - spriteW / 2;
+let pY = height / 2 - spriteH / 2;
 let vector = null;
 let spriteRow = 0;
 const waweX = 10;
@@ -35,31 +37,41 @@ function drawWawe(xStart, yStart) {
   ctx.stroke();
 }
 
-function moveWawe() {
-  if (waweY > 400) {
-    for (let i = waweX; i < 600; i += 100) {
-      drawWawe(i, waweY);
+function moveWawe(numWawe) {
+  let nextWaweX = waweX;
+  let nextWaweY = waweY;
+  for (let j = 0; j < numWawe; j += 1) {
+    if (waweY > 400) {
+      for (let i = nextWaweX; i < width; i += 100) {
+        drawWawe(i, nextWaweY);
+        if (j % 2 === 0) {
+          nextWaweX = 50;
+        } else if (j % 3 === 1) {
+          nextWaweX = 25;
+        } else {
+          nextWaweX = 10;
+        }
+      }
+      // for (let i = waweX + 50; i < width; i += 100) {
+      //   drawWawe(i, waweY + 35);
+      // }
+      // for (let i = waweX + 30; i < width; i += 100) {
+      //   drawWawe(i, waweY + 70);
+      // }
+      // for (let i = waweX; i < width; i += 100) {
+      //   drawWawe(i, waweY + 140);
+      // }
+      waweY -= 1;
+    } else {
+      waweY = height;
     }
-    for (let i = waweX + 50; i < 600; i += 100) {
-      drawWawe(i, waweY + 35);
-    }
-    for (let i = waweX + 30; i < 600; i += 100) {
-      drawWawe(i, waweY + 70);
-    }
-
-    for (let i = waweX; i < 600; i += 100) {
-      drawWawe(i, waweY + 140);
-    }
-
-    waweY -= 10;
-  } else {
-    waweY = 600;
+    nextWaweY += 35;
   }
 }
 
 function drawSand() {
-  for (let i = 0; i <= 600; i += 8) {
-    for (let j = 0; j <= 600; j += 8) {
+  for (let i = 0; i <= width; i += 8) {
+    for (let j = 0; j <= height; j += 8) {
       if (i % 3 === 0) {
         ctx.fillStyle = '#fcdd76';
       } else {
@@ -130,8 +142,8 @@ img.addEventListener('load', () => {
 
           move();
 
-          if (pY >= 550) {
-            pY = 550;
+          if (pY >= height - spriteH) {
+            pY = height - spriteH;
           } else {
             pY += 10;
           }
@@ -166,23 +178,22 @@ img.addEventListener('load', () => {
 
           move();
 
-          if (pX >= 560) {
-            pX = 560;
+          if (pX >= width - spriteW) {
+            pX = width - spriteW;
           } else {
             pX += 10;
           }
           break;
         default:
-          pX = 300;
-          pY = 300;
+          break;
       }
     }
-    ctx.clearRect(0, 0, 600, 600);
+    ctx.clearRect(0, 0, width, height);
     drawSand();
     drawWather();
-    moveWawe();
+    moveWawe(8);
     ctx.drawImage(img, cycle * spriteW, spriteRow, spriteW, spriteH, pX, pY, spriteW, spriteH);
-  }, 100);
+  }, 150);
 });
 // console.log('###: INIT :###');
 // console.log('####');

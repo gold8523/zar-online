@@ -1,15 +1,20 @@
 import './index.scss';
-import terrainAtlas from './assets/terrain.png';
-import worldCfg from './configs/world.json';
-import sprites from './configs/sprites';
-import DenWalk from './assets/Male-5-Walk.png';
+import ClientGame from './client/ClientGame';
 
-const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
+window.addEventListener('load', () => {
+  ClientGame.init({ tagId: 'game' });
+});
+// import terrainAtlas from './assets/terrain.png';
+// import worldCfg from './configs/world.json';
+// import sprites from './configs/sprites';
+// import DenWalk from './assets/Male-5-Walk.png';
+
+// const canvas = document.getElementById('game');
+// const ctx = canvas.getContext('2d');
 // const width = canvas.width;
 // const height = canvas.height;
-const spriteW = 48;
-const spriteH = 48;
+// const spriteW = 48;
+// const spriteH = 48;
 // const shots = 3;
 // let cycle = 0;
 // let bottomPressed = false;
@@ -18,21 +23,21 @@ const spriteH = 48;
 // let vector = null;
 // let spriteRow = 0;
 
-const terrain = document.createElement('img');
-terrain.src = terrainAtlas;
+// const terrain = document.createElement('img');
+// terrain.src = terrainAtlas;
 
-const img = document.createElement('img');
-img.src = DenWalk;
+// const img = document.createElement('img');
+// img.src = DenWalk;
 
-terrain.addEventListener('load', () => {
-  const { map } = worldCfg;
-  map.forEach((cfgRow, y) => {
-    cfgRow.forEach((cfgCell, x) => {
-      const [sX, sY, sW, sH] = sprites.terrain[cfgCell[0]].frames[0];
-      ctx.drawImage(terrain, sX, sY, sW, sH, x * spriteW, y * spriteH, spriteW, spriteH);
-    });
-  });
-});
+// terrain.addEventListener('load', () => {
+//   const { map } = worldCfg;
+//   map.forEach((cfgRow, y) => {
+//     cfgRow.forEach((cfgCell, x) => {
+//       const [sX, sY, sW, sH] = sprites.terrain[cfgCell[0]].frames[0];
+//       ctx.drawImage(terrain, sX, sY, sW, sH, x * spriteW, y * spriteH, spriteW, spriteH);
+//     });
+//   });
+// });
 
 // function keyDownHendler(e) {
 //   if (e.key === 'Down' || e.key === 'ArrowDown') {
@@ -74,64 +79,68 @@ terrain.addEventListener('load', () => {
 
 // document.addEventListener('keyup', keyUpHendler);
 
-// img.addEventListener('load', () => {
-//   setInterval(() => {
-//     if (bottomPressed) {
-//       switch (vector) {
-//         case 'Down':
-//           spriteRow = 0;
+// function walk(timestamp) {
+//   if (bottomPressed) {
+//     switch (vector) {
+//       case 'Down':
+//         spriteRow = 0;
 
-//           move();
+//         move();
 
-//           if (pY >= height - spriteH) {
-//             pY = height - spriteH;
-//           } else {
-//             pY += 10;
-//           }
+//         if (pY >= height - spriteH) {
+//           pY = height - spriteH;
+//         } else {
+//           pY += 10;
+//         }
 
-//           break;
-//         case 'Up':
-//           spriteRow = spriteH * 3;
+//         break;
+//       case 'Up':
+//         spriteRow = spriteH * 3;
 
-//           move();
+//         move();
 
-//           if (pY <= 0) {
-//             pY = 0;
-//           } else {
-//             pY -= 10;
-//           }
+//         if (pY <= 0) {
+//           pY = 0;
+//         } else {
+//           pY -= 10;
+//         }
 
-//           break;
-//         case 'Left':
-//           spriteRow = spriteH;
+//         break;
+//       case 'Left':
+//         spriteRow = spriteH;
 
-//           move();
+//         move();
 
-//           if (pX <= 0) {
-//             pX = 0;
-//           } else {
-//             pX -= 10;
-//           }
+//         if (pX <= 0) {
+//           pX = 0;
+//         } else {
+//           pX -= 10;
+//         }
 
-//           break;
-//         case 'Right':
-//           spriteRow = spriteH * 2;
+//         break;
+//       case 'Right':
+//         spriteRow = spriteH * 2;
 
-//           move();
+//         move();
 
-//           if (pX >= width - spriteW) {
-//             pX = width - spriteW;
-//           } else {
-//             pX += 10;
-//           }
-//           break;
-//         default:
-//           break;
-//       }
+//         if (pX >= width - spriteW) {
+//           pX = width - spriteW;
+//         } else {
+//           pX += 10;
+//         }
+//         break;
+//       default:
+//         break;
 //     }
-//     ctx.clearRect(0, 0, width, height);
-//     ctx.drawImage(img, cycle * spriteW, spriteRow, spriteW, spriteH, pX, pY, spriteW, spriteH);
-//   }, 150);
+//   }
+//   ctx.clearRect(0, 0, width, height);
+//   ctx.drawImage(img, cycle * spriteW, spriteRow, spriteW, spriteH, pX, pY, spriteW, spriteH);
+
+//   window.requestAnimationFrame(walk);
+// }
+
+// img.addEventListener('load', () => {
+//   window.requestAnimationFrame(walk);
 // });
-// console.log('###: INIT :###');
-// console.log('####');
+// // console.log('###: INIT :###');
+// // console.log('####');

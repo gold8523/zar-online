@@ -1,6 +1,7 @@
 import './index.scss';
 import ClientGame from './client/ClientGame';
 
+// после загрузки страницы создаем экземпляр игры и получаем canvas
 window.addEventListener('load', () => {
   ClientGame.init({ tagId: 'game' });
 });

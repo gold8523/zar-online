@@ -11,6 +11,7 @@ class ClientWorld {
     });
   }
 
+  // в цикле получаем название ячейки и вызываем функцию рендера
   getWorldMap() {
     const { map } = this.levelCfg;
 
@@ -28,6 +29,7 @@ class ClientWorld {
     });
   }
 
+  // запускаем рисование карты
   init() {
     this.getWorldMap();
   }

@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 class ClientWorld {
   constructor(game, engine, levelCfg) {
     Object.assign(this, {
@@ -6,18 +8,30 @@ class ClientWorld {
       levelCfg,
       height: levelCfg.map.length,
       width: levelCfg.map[0].length,
+      worldBlockW: 48,
+      worldBlockH: 48,
+    });
+  }
+
+  getWorldMap() {
+    const { map } = this.levelCfg;
+
+    map.forEach((mapRow, y) => {
+      mapRow.forEach((mapCell, x) => {
+        this.engine.renderSpriteFrame({
+          sprite: ['terrain', mapCell[0][0]],
+          frame: 0,
+          x: x * this.worldBlockH,
+          y: y * this.worldBlockW,
+          w: this.worldBlockW,
+          h: this.worldBlockH,
+        });
+      });
     });
   }
 
   init() {
-    this.engine.renderSpriteFrame({
-      sprite: ['terrain', 'grass'],
-      frame: 0,
-      x: 0,
-      y: 0,
-      w: 48,
-      h: 48,
-    });
+    this.getWorldMap();
   }
 }
 

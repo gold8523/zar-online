@@ -63,8 +63,11 @@ class ClientEngine {
   }
 
   renderSpriteFrame({ sprite, frame, x, y, w, h }) {
+    // console.log(sprite);
     const spriteCfg = this.sprites[sprite[0]][sprite[1]];
+    // console.log('#### render', this.sprites);
     const [fx, fy, fw, fh] = spriteCfg.frames[frame];
+    // console.log('#### spriteCfg.frames[frame]', spriteCfg.frames[frame]);
     const img = this.images[spriteCfg.img];
 
     this.ctx.drawImage(img, fx, fy, fw, fh, x, y, w, h);

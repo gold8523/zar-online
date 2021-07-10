@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
 class ClientWorld {
   constructor(game, engine, levelCfg) {
     Object.assign(this, {

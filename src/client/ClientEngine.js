@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
 import EventSourceMixin from '../common/EventSourceMixin';
 
 // класс движка
@@ -44,15 +42,21 @@ class ClientEngine {
   loadSprites(spritesGroup) {
     this.imageLoaders = [];
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const groupName in spritesGroup) {
-      const group = spritesGroup[groupName];
-      this.sprites[groupName] = group;
+      if ({}.hasOwnProperty.call(spritesGroup, groupName)) {
+        const group = spritesGroup[groupName];
+        this.sprites[groupName] = group;
 
-      for (const spriteName in group) {
-        const { img } = group[spriteName];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const spriteName in group) {
+          if ({}.hasOwnProperty.call(group, spriteName)) {
+            const { img } = group[spriteName];
 
-        if (!this.images[img]) {
-          this.imageLoaders.push(this.loadImage(img));
+            if (!this.images[img]) {
+              this.imageLoaders.push(this.loadImage(img));
+            }
+          }
         }
       }
     }

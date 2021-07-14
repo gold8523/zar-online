@@ -12,8 +12,7 @@ module.exports = {
     'prefer-destructuring': ['error', {
       array: false,
       object: false,
-    }, {
-      enforceForRenamedProperties: false,
-    }],
+    }, { enforceForRenamedProperties: false }],
+    'object-curly-newline': ['error', { multiline: true }],
   },
 };

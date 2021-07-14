@@ -6,17 +6,14 @@ const port = process.env.PORT || 3000;
 
 const FILES = /\.(js|js.map|woff|woff2|svg|bmp|jpg|jpeg|gif|png|ico)(\?v=\d+\.\d+\.\d+)?$/;
 
-const PATH = {
-  '/': 'index.html',
-};
+const PATH = { '/': 'index.html' };
+
+const hapi = require('@hapi/inert');
 
 const init = async () => {
-  const server = Hapi.server({
-    port,
-  });
+  const server = Hapi.server({ port });
 
-  // eslint-disable-next-line global-require
-  await server.register(require('@hapi/inert'));
+  await server.register(hapi);
 
   server.route({
     method: 'GET',

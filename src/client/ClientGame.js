@@ -45,41 +45,31 @@ class ClientGame {
     });
   }
 
+  moveMyChar(keyDown, x, y) {
+    if (keyDown) {
+      this.player.moveByCellCoord(x, y, (cell) => cell.findObjectsByType('grass').length);
+    }
+  }
+
   initKeys() {
     this.engine.input.onKey({
       ArrowLeft: (keydown) => {
-        console.log(keydown);
-
-        if (keydown) {
-          this.player.moveByCellCoord(-1, 0, (cell) => cell.findObjectsByType('grass').length);
-        }
+        this.moveMyChar(keydown, -1, 0);
       },
     });
     this.engine.input.onKey({
       ArrowRight: (keydown) => {
-        console.log(keydown);
-
-        if (keydown) {
-          this.player.moveByCellCoord(+1, 0, (cell) => cell.findObjectsByType('grass').length);
-        }
+        this.moveMyChar(keydown, +1, 0);
       },
     });
     this.engine.input.onKey({
       ArrowDown: (keydown) => {
-        console.log(keydown);
-
-        if (keydown) {
-          this.player.moveByCellCoord(0, +1, (cell) => cell.findObjectsByType('grass').length);
-        }
+        this.moveMyChar(keydown, 0, +1);
       },
     });
     this.engine.input.onKey({
       ArrowUp: (keydown) => {
-        console.log(keydown);
-
-        if (keydown) {
-          this.player.moveByCellCoord(0, -1, (cell) => cell.findObjectsByType('grass').length);
-        }
+        this.moveMyChar(keydown, 0, -1);
       },
     });
   }

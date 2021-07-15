@@ -1,4 +1,6 @@
 import EventSourceMixin from '../common/EventSourceMixin';
+import ClientCamera from './ClientCamera';
+import ClientInput from './ClientInput';
 
 // класс движка
 class ClientEngine {
@@ -9,9 +11,12 @@ class ClientEngine {
       imageLoaders: [],
       sprites: {},
       images: {},
+      camera: new ClientCamera({ canvas, engine: this }),
+      input: new ClientInput(canvas),
     });
 
     this.ctx = canvas.getContext('2d');
+    console.log(this.canvas);
 
     // указываем контекст циклу анимации
     this.loop = this.loop.bind(this);

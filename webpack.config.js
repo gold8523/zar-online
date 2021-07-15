@@ -54,13 +54,8 @@ module.exports = {
     port: 3000,
     overlay: true,
     open: true,
-<<<<<<< HEAD
-    inline: true,
-    // hot: true,
-=======
     // hot: true,
     inline: true,
->>>>>>> 57e6165bd9ba1fb525b9fa225bc9401b572c5d47
     historyApiFallback: true,
     // headers: {
     //   'Content-Security-Policy': 'default-src `self`',

@@ -14,5 +14,7 @@ module.exports = {
       object: false,
     }, { enforceForRenamedProperties: false }],
     'object-curly-newline': ['error', { multiline: true }],
+    'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
+    'max-len': ['error', { code: 120 }],
   },
 };

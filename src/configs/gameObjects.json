@@ -34,7 +34,7 @@
         "type": "animated",
         "size": 100,
         "spriteSize": 80,
-        "sprite": ["characters", "boy3"],
+        "sprite": ["characters", "boy1"],
         "states": {
             "main": {
                 "duration": 5000,

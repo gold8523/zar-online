@@ -24,7 +24,7 @@ class ClientGame {
 
   // создаем экземпляр движка
   createEngine() {
-    return new ClientEngine(document.getElementById(this.cfg.tagId));
+    return new ClientEngine(document.getElementById(this.cfg.tagId), this);
   }
 
   // создаем экземпляр класса мира и передаем контекст, движок, конфиг мира
@@ -32,11 +32,17 @@ class ClientGame {
     return new ClientWorld(this, this.engine, levelCfg);
   }
 
+  // возвращаем экземпляр мира в метод moveTo() объекта movableObject
+  getWorld() {
+    return this.map;
+  }
+
   // загружаем спрайты и запускаем отрисовку мира
   initEngine() {
     this.engine.loadSprites(sprites).then(() => {
       this.map.init();
       this.engine.on('render', (_, time) => {
+        this.engine.camera.focusAtGameObject(this.player);
         this.map.render(time);
       });
       // запускаем движок

@@ -4,7 +4,7 @@ import ClientInput from './ClientInput';
 
 // класс движка
 class ClientEngine {
-  constructor(canvas) {
+  constructor(canvas, game) {
     Object.assign(this, {
       canvas,
       ctx: null,
@@ -13,6 +13,7 @@ class ClientEngine {
       images: {},
       camera: new ClientCamera({ canvas, engine: this }),
       input: new ClientInput(canvas),
+      game,
     });
 
     this.ctx = canvas.getContext('2d');
@@ -88,8 +89,10 @@ class ClientEngine {
     const [fx, fy, fw, fh] = spriteCfg.frames[frame];
     // запиываем картинку из файла
     const img = this.images[spriteCfg.img];
+    // получаем камеру(объект)
+    const camera = this.camera;
 
-    this.ctx.drawImage(img, fx, fy, fw, fh, x, y, w, h);
+    this.ctx.drawImage(img, fx, fy, fw, fh, x - camera.x, y - camera.y, w, h);
   }
 }
 

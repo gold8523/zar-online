@@ -51,31 +51,43 @@ class ClientGame {
     });
   }
 
-  moveMyChar(keyDown, x, y) {
-    if (keyDown) {
-      this.player.moveByCellCoord(x, y, (cell) => cell.findObjectsByType('grass').length);
+  moveMyChar(keyDown, dir) {
+    const dirs = {
+      left: [-1, 0],
+      right: [+1, 0],
+      up: [0, -1],
+      down: [0, +1],
+    };
+
+    if (this.player && this.player.motionProgress === 1) {
+      const canMove = this.player.moveByCellCoord(dirs[dir][0], dirs[dir][1], (cell) => cell.findObjectsByType('grass').length);
+
+      if (canMove) {
+        this.player.setState(dir);
+        this.player.once('motion-stopped', () => this.player.setState('main'));
+      }
     }
   }
 
   initKeys() {
     this.engine.input.onKey({
       ArrowLeft: (keydown) => {
-        this.moveMyChar(keydown, -1, 0);
+        this.moveMyChar(keydown, 'left');
       },
     });
     this.engine.input.onKey({
       ArrowRight: (keydown) => {
-        this.moveMyChar(keydown, +1, 0);
+        this.moveMyChar(keydown, 'right');
       },
     });
     this.engine.input.onKey({
       ArrowDown: (keydown) => {
-        this.moveMyChar(keydown, 0, +1);
+        this.moveMyChar(keydown, 'down');
       },
     });
     this.engine.input.onKey({
       ArrowUp: (keydown) => {
-        this.moveMyChar(keydown, 0, -1);
+        this.moveMyChar(keydown, 'up');
       },
     });
   }

@@ -52,6 +52,7 @@ class ClientGame {
   }
 
   moveMyChar(keyDown, dir) {
+    const { player } = this;
     const dirs = {
       left: [-1, 0],
       right: [+1, 0],
@@ -59,12 +60,15 @@ class ClientGame {
       down: [0, +1],
     };
 
-    if (this.player && this.player.motionProgress === 1) {
-      const canMove = this.player.moveByCellCoord(dirs[dir][0], dirs[dir][1], (cell) => cell.findObjectsByType('grass').length);
+    if (player && player.motionProgress === 1) {
+      // eslint-disable-next-line arrow-body-style
+      const canMove = player.moveByCellCoord(dirs[dir][0], dirs[dir][1], (cell) => {
+        return cell.findObjectsByType('grass').length;
+      });
 
       if (canMove) {
-        this.player.setState(dir);
-        this.player.once('motion-stopped', () => this.player.setState('main'));
+        player.setState(dir);
+        player.once('motion-stopped', () => player.setState('main'));
       }
     }
   }

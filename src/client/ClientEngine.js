@@ -19,7 +19,6 @@ class ClientEngine {
     });
 
     this.ctx = canvas.getContext('2d');
-    console.log(this.canvas);
 
     // указываем контекст циклу анимации
     this.loop = this.loop.bind(this);

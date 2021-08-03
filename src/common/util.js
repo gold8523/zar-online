@@ -1,8 +1,8 @@
 export function clamp(x, fromX, toX) {
-  let y = null;
+  let y = x;
 
-  if (x < fromX) y = fromX;
-  if (x > toX) y = toX;
+  if (y < fromX) y = fromX;
+  if (y > toX) y = toX;
 
   return y;
 }

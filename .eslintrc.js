@@ -18,5 +18,6 @@ module.exports = {
     'max-len': ['error', { code: 200 }],
     'no-bitwise': ['error', { int32Hint: true }],
     'no-param-reassign': ['error', { props: false }],
+    'arrow-body-style': ['error', 'as-needed'],
   },
 };

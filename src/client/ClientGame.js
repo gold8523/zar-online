@@ -20,6 +20,7 @@ class ClientGame {
 
   setPlayer(player) {
     this.player = player;
+    this.myName = this.cfg.myPlayerName;
   }
 
   // создаем экземпляр движка

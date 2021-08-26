@@ -3,7 +3,19 @@ import ClientGame from './client/ClientGame';
 
 // после загрузки страницы создаем экземпляр игры и получаем canvas
 window.addEventListener('load', () => {
-  ClientGame.init({ tagId: 'game' });
+  const form = document.getElementById('nameForm');
+  const startImg = document.querySelector('.start-game');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const myPlayerName = form[0].value;
+
+    startImg.remove();
+    // form.remove();
+    ClientGame.init({
+      tagId: 'game',
+      myPlayerName,
+    });
+  });
 });
 // import terrainAtlas from './assets/terrain.png';
 // import worldCfg from './configs/world.json';

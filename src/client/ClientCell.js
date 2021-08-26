@@ -29,7 +29,6 @@ class ClientCell extends PositionedObject {
   initGameObjects() {
     const { cellCfg, objectClasses } = this;
 
-    // this.objects = cellCfg[0].map((objCfg) => new ClientGameObject({ cell: this, objCfg }));
     // eslint-disable-next-line no-return-assign
     this.objects = cellCfg.map(
       (layer, layerId) =>

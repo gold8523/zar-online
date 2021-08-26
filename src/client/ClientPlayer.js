@@ -5,7 +5,7 @@ class ClientPlayer extends ClientGameObject {
   constructor(cfg) {
     super(cfg);
 
-    this.playerName = 'den4ik';
+    this.playerName = 'my name';
 
     const world = cfg.cell.world;
 
@@ -16,6 +16,8 @@ class ClientPlayer extends ClientGameObject {
     super.render(time);
 
     const { world } = this;
+
+    this.playerName = world.game.myName;
 
     world.engine.renderSign({
       x: this.x + world.cellWidth / 2,

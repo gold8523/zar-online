@@ -4,7 +4,7 @@ import ClientInput from './ClientInput';
 
 // класс движка
 class ClientEngine {
-  constructor(canvas) {
+  constructor(canvas, game) {
     Object.assign(this, {
       canvas,
       ctx: null,
@@ -13,10 +13,12 @@ class ClientEngine {
       images: {},
       camera: new ClientCamera({ canvas, engine: this }),
       input: new ClientInput(canvas),
+      game,
+      lastRenderTime: 0,
+      startTime: 0,
     });
 
     this.ctx = canvas.getContext('2d');
-    console.log(this.canvas);
 
     // указываем контекст циклу анимации
     this.loop = this.loop.bind(this);
@@ -29,6 +31,12 @@ class ClientEngine {
 
   // бесконечный вызов анимации
   loop(timestamp) {
+    if (!this.startTime) {
+      this.startTime = timestamp;
+    }
+
+    this.lastRenderTime = timestamp;
+
     const { canvas, ctx } = this;
     ctx.fillStyle = 'black';
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -88,8 +96,10 @@ class ClientEngine {
     const [fx, fy, fw, fh] = spriteCfg.frames[frame];
     // запиываем картинку из файла
     const img = this.images[spriteCfg.img];
+    // получаем камеру(объект)
+    const camera = this.camera;
 
-    this.ctx.drawImage(img, fx, fy, fw, fh, x, y, w, h);
+    this.ctx.drawImage(img, fx, fy, fw, fh, x - camera.x, y - camera.y, w, h);
   }
 }
 

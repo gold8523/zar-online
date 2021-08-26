@@ -1,8 +1,21 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable camelcase */
-export default function clamp(x, from_x, to_x) {
-  if (x < from_x) x = from_x;
-  if (x > to_x) x = to_x;
+export function clamp(x, fromX, toX) {
+  let y = x;
 
-  return x;
+  if (y < fromX) y = fromX;
+  if (y > toX) y = toX;
+
+  return y;
+}
+// вычисляем изменение движения объекта от 0 до 1. 0 - начало движения. 1 - конец
+export function animateEx(diffX, startTime, currentTime, speed, looped = false) {
+  const diff = currentTime - startTime;
+  let time = (speed && diff / speed) || 0;
+
+  if (looped) {
+    time %= 1;
+  } else if (time > 1) {
+    time = 1;
+  }
+
+  return { offset: diffX * time, progress: time };
 }

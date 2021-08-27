@@ -3,18 +3,43 @@ import ClientGame from './client/ClientGame';
 
 // после загрузки страницы создаем экземпляр игры и получаем canvas
 window.addEventListener('load', () => {
-  const form = document.getElementById('nameForm');
-  const startImg = document.querySelector('.start-game');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const myPlayerName = form[0].value;
+  const $form = document.getElementById('nameForm');
+  const $putName = document.getElementById('name');
+  const $startImg = document.querySelector('.start-game');
 
-    startImg.remove();
-    // form.remove();
-    ClientGame.init({
-      tagId: 'game',
-      myPlayerName,
-    });
+  const $chatWrap = document.querySelector('.chat-wrap');
+
+  const $chatForm = document.getElementById('form');
+  const $chatInput = document.getElementById('input');
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    const myPlayerName = $putName.value;
+
+    if ($putName) {
+      $form.removeEventListener('submit', submitForm);
+      $startImg.remove();
+      // form.remove();
+
+      $chatWrap.style.display = 'block';
+
+      ClientGame.init({
+        tagId: 'game',
+        myPlayerName,
+      });
+    }
+  };
+
+  $form.addEventListener('submit', submitForm);
+
+  $chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if ($chatInput) {
+      console.log('##### =>', $chatInput.value);
+
+      $chatInput.value = '';
+    }
   });
 });
 // import terrainAtlas from './assets/terrain.png';

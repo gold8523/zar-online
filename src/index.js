@@ -62,12 +62,12 @@ window.addEventListener('load', () => {
   socket.on('chat message', (data) => {
     let myMs;
     for (let i = 0; i < usersOnline.length; i++) {
-      const { id, name } = usersOnline[i];
+      const { id } = usersOnline[i];
       console.log('#', id);
-      if (data.name === name) {
-        myMs = `<p><strong>${getTime(data.time)}</strong> <span style="color: purple">${data.name}: ${data.msg}<span></p>`;
-      } else {
+      if (data.id !== id) {
         myMs = `<p><strong>${getTime(data.time)}</strong> ${data.name}: ${data.msg}</p>`;
+      } else {
+        myMs = `<p><strong>${getTime(data.time)}</strong> <span style="color: purple">${data.name}: ${data.msg}<span></p>`;
       }
     }
     // if () {

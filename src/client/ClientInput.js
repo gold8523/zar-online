@@ -17,6 +17,7 @@ class ClientInput {
     // eslint-disable-next-line no-unused-expressions
     this.keyHandlers[e.code] && this.keyHandlers[e.code](true);
     this.trigger('keydown', e);
+    window.document.body.style.overflow = 'hidden';
   }
 
   onKeyUp(e) {
@@ -24,6 +25,7 @@ class ClientInput {
     // eslint-disable-next-line no-unused-expressions
     this.keyHandlers[e.code] && this.keyHandlers[e.code](false);
     this.trigger('keyup', e);
+    window.document.body.style.overflow = 'auto';
   }
 
   onKey({ ...handlers }) {

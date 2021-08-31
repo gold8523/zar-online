@@ -1,18 +1,26 @@
 import ClientEngine from './ClientEngine';
 import ClientWorld from './ClientWorld';
-import gameObjects from '../configs/gameObjects.json';
+// import gameObjects from '../configs/gameObjects.json';
+import ClientApi from './ClientApi';
 
-import sprites from '../configs/sprites';
-import levelCfg from '../configs/world.json';
+// import sprites from '../configs/sprites';
+// import levelCfg from '../configs/world.json';
 
 class ClientGame {
   constructor(cfg) {
     Object.assign(this, {
       cfg,
-      gameObjects,
+      gameObjects: cfg.gameObjects,
       player: null,
+      players: {},
+      api: new ClientApi({
+        game: this,
+        ...cfg.apiCfg,
+      }),
+      spawnPoint: [],
     });
 
+    this.api.connect();
     this.engine = this.createEngine();
     this.map = this.createWorld();
     this.initEngine();
@@ -20,7 +28,6 @@ class ClientGame {
 
   setPlayer(player) {
     this.player = player;
-    this.myName = this.cfg.myPlayerName;
   }
 
   // создаем экземпляр движка
@@ -30,7 +37,7 @@ class ClientGame {
 
   // создаем экземпляр класса мира и передаем контекст, движок, конфиг мира
   createWorld() {
-    return new ClientWorld(this, this.engine, levelCfg);
+    return new ClientWorld(this, this.engine, this.cfg.world);
   }
 
   // возвращаем экземпляр мира в метод moveTo() объекта movableObject
@@ -40,19 +47,55 @@ class ClientGame {
 
   // загружаем спрайты и запускаем отрисовку мира
   initEngine() {
-    this.engine.loadSprites(sprites).then(() => {
+    this.engine.loadSprites(this.cfg.sprites).then(() => {
       this.map.init();
       this.engine.on('render', (_, time) => {
-        this.engine.camera.focusAtGameObject(this.player);
+        // eslint-disable-next-line no-unused-expressions
+        this.player && this.engine.camera.focusAtGameObject(this.player);
         this.map.render(time);
       });
       // запускаем движок
       this.engine.start();
       this.initKeys();
+      this.engine.focus();
+      this.api.join(this.cfg.playerName);
     });
   }
 
+  setPlayers(playersList) {
+    playersList.forEach((player) => this.createPlayer(player));
+  }
+
+  createCurrentPlayer(playerCfg) {
+    const playerObj = this.createPlayer(playerCfg);
+
+    this.setPlayer(playerObj);
+  }
+
+  createPlayer({ id, col, row, layer, skin, name }) {
+    if (!this.players[id]) {
+      const cell = this.map.cellAt(col, row);
+      const playerObj = cell.createGameObject(
+        {
+          // eslint-disable-next-line quote-props
+          class: 'player',
+          type: skin,
+          playerId: id,
+          playerName: name,
+        },
+        layer,
+      );
+
+      cell.addGameObject(playerObj);
+
+      this.players[id] = playerObj;
+    }
+
+    return this.players[id];
+  }
+
   moveMyChar(keyDown, dir) {
+    this.api.move(dir);
     const { player } = this;
     const dirs = {
       left: [-1, 0],
@@ -72,6 +115,23 @@ class ClientGame {
         player.once('motion-stopped', () => player.setState('main'));
       }
     }
+  }
+
+  getPlayerById(id) {
+    return this.players[id];
+  }
+
+  removePlayerById(id) {
+    const player = this.getPlayerById(id);
+
+    if (player) {
+      player.detouch();
+      delete this.players[id];
+    }
+  }
+
+  addSpawnPoint(spawnPoint) {
+    this.spawnPoint.push(spawnPoint);
   }
 
   initKeys() {

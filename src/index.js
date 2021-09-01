@@ -1,9 +1,72 @@
+import { io } from 'socket.io-client';
 import './index.scss';
 import ClientGame from './client/ClientGame';
+import { getTime } from './common/util';
 
 // после загрузки страницы создаем экземпляр игры и получаем canvas
 window.addEventListener('load', () => {
-  ClientGame.init({ tagId: 'game' });
+  const socket = io('https://jsprochat.herokuapp.com/');
+  const $form = document.getElementById('nameForm');
+  const $putName = document.getElementById('name');
+  const $startImg = document.querySelector('.start-game');
+
+  const $chatWrap = document.querySelector('.chat-wrap');
+
+  const $chatForm = document.getElementById('form');
+  const $chatInput = document.getElementById('input');
+  const $message = document.querySelector('.message');
+
+  const submitForm = (e) => {
+    e.preventDefault();
+
+    if ($putName.value) {
+      ClientGame.init({
+        tagId: 'game',
+        myPlayerName: $putName.value,
+      });
+
+      socket.emit('start', $putName.value);
+
+      $chatWrap.style.display = 'block';
+
+      $form.removeEventListener('submit', submitForm);
+      $startImg.remove();
+      // form.remove();
+    }
+  };
+
+  $form.addEventListener('submit', submitForm);
+
+  $chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if ($chatInput) {
+      console.log('##### =>', $chatInput.value);
+      socket.emit('chat message', $chatInput.value);
+      $chatInput.value = '';
+    }
+  });
+
+  socket.on('chat online', (data) => {
+    // console.log('##### online', usersOnline);
+    $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> сейчас online: <span style="color: blue">${data.online}<span></p>`);
+  });
+
+  const chId = socket.on('chat connection', (data) => {
+    $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> <span style="color: green">${data.msg}<span></p>`);
+  });
+
+  socket.on('chat message', (data) => {
+    if (chId.id === data.id) {
+      $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> <span style="color: purple">${data.name}: ${data.msg}</span></p>`);
+    } else {
+      $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> ${data.name}: ${data.msg}</p>`);
+    }
+  });
+
+  socket.on('chat disconnect', (data) => {
+    $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> <span style="color: red">${data.msg}<span></p>`);
+  });
 });
 // import terrainAtlas from './assets/terrain.png';
 // import worldCfg from './configs/world.json';

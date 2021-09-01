@@ -15,8 +15,8 @@ window.addEventListener('load', async () => {
 
   const $chatWrap = document.querySelector('.chat-wrap');
 
-  const $chatForm = document.getElementById('form');
-  const $chatInput = document.getElementById('input');
+  // const $chatForm = document.getElementById('form');
+  // const $chatInput = document.getElementById('input');
   // const $message = document.querySelector('.message');
 
   $startGame.style.display = 'flex';
@@ -35,6 +35,12 @@ window.addEventListener('load', async () => {
           url: 'https://jsmarathonpro.herokuapp.com/',
           path: '/game',
         },
+        chatApiCfg: {
+          chatUrl: 'https://jsprochat.herokuapp.com/',
+          // form: $chatForm,
+          // chatInput: $chatInput,
+          // message: $message,
+        },
       });
 
       // socket.emit('start', $putName.value);
@@ -49,14 +55,14 @@ window.addEventListener('load', async () => {
 
   $form.addEventListener('submit', submitForm);
 
-  $chatForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+  // $chatForm.addEventListener('submit', (e) => {
+  //   e.preventDefault();
 
-    if ($chatInput) {
-      // socket.emit('chat message', $chatInput.value);
-      $chatInput.value = '';
-    }
-  });
+  //   if ($chatInput) {
+  //     // socket.emit('chat message', $chatInput.value);
+  //     $chatInput.value = '';
+  //   }
+  // });
 
   // socket.on('chat online', (data) => {
   //   $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> сейчас online: <span style="color: blue">${data.online}<span></p>`);

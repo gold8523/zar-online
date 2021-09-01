@@ -2,6 +2,7 @@ import ClientEngine from './ClientEngine';
 import ClientWorld from './ClientWorld';
 // import gameObjects from '../configs/gameObjects.json';
 import ClientApi from './ClientApi';
+import ClientChatApi from './ClientChatApi';
 
 // import sprites from '../configs/sprites';
 // import levelCfg from '../configs/world.json';
@@ -17,6 +18,10 @@ class ClientGame {
         game: this,
         ...cfg.apiCfg,
       }),
+      chatApi: new ClientChatApi({
+        chat: this,
+        ...cfg.chatApiCfg,
+      }),
       spawnPoint: [],
     });
 
@@ -24,6 +29,7 @@ class ClientGame {
     this.engine = this.createEngine();
     this.map = this.createWorld();
     this.initEngine();
+    this.chatApi.connect();
   }
 
   setPlayer(player) {
@@ -96,25 +102,25 @@ class ClientGame {
 
   moveMyChar(keyDown, dir) {
     this.api.move(dir);
-    const { player } = this;
-    const dirs = {
-      left: [-1, 0],
-      right: [+1, 0],
-      up: [0, -1],
-      down: [0, +1],
-    };
+    // const { player } = this;
+    // const dirs = {
+    //   left: [-1, 0],
+    //   right: [+1, 0],
+    //   up: [0, -1],
+    //   down: [0, +1],
+    // };
 
-    if (player && player.motionProgress === 1) {
-      // eslint-disable-next-line arrow-body-style
-      const canMove = player.moveByCellCoord(dirs[dir][0], dirs[dir][1], (cell) => {
-        return cell.findObjectsByType('grass').length;
-      });
+    // if (player && player.motionProgress === 1) {
+    //   // eslint-disable-next-line arrow-body-style
+    //   const canMove = player.moveByCellCoord(dirs[dir][0], dirs[dir][1], (cell) => {
+    //     return cell.findObjectsByType('grass').length;
+    //   });
 
-      if (canMove) {
-        player.setState(dir);
-        player.once('motion-stopped', () => player.setState('main'));
-      }
-    }
+    //   if (canMove) {
+    //     player.setState(dir);
+    //     player.once('motion-stopped', () => player.setState('main'));
+    //   }
+    // }
   }
 
   getPlayerById(id) {

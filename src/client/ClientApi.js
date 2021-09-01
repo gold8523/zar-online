@@ -26,21 +26,30 @@ class ClientApi {
   onJoin(player) {
     this.game.createCurrentPlayer(player.player);
     this.game.setPlayers(player.playersList);
-    console.log('#### player', player);
   }
 
   onNewPlayer(player) {
     this.game.createPlayer(player);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   onPlayerMove(moveCfg) {
     const { game } = this;
-    const { col, row, id } = moveCfg;
+    const { col, row, oldCol, oldRow, id } = moveCfg;
     const player = game.getPlayerById(id);
 
     if (player) {
+      if (col < oldCol && row === oldRow) {
+        player.setState('left');
+      } else if (col > oldCol && row === oldRow) {
+        player.setState('right');
+      } else if (col === oldCol && row < oldRow) {
+        player.setState('up');
+      } else if (col === oldCol && row > oldRow) {
+        player.setState('down');
+      }
+
       player.moveToCellCoord(col, row);
+      player.once('motion-stopped', () => player.setState('main'));
     }
   }
 
@@ -54,6 +63,18 @@ class ClientApi {
 
   move(dir) {
     this.io.emit('move', dir);
+  }
+
+  chat() {
+    const { form, input } = this;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (input) {
+        this.io.emit('chat message', input.value);
+        input.value = '';
+      }
+    });
   }
 }
 

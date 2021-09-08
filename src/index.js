@@ -1,9 +1,88 @@
+// import { io } from 'socket.io-client';
 import './index.scss';
 import ClientGame from './client/ClientGame';
+// import { getTime } from './common/util';
 
 // после загрузки страницы создаем экземпляр игры и получаем canvas
-window.addEventListener('load', () => {
-  ClientGame.init({ tagId: 'game' });
+window.addEventListener('load', async () => {
+  const world = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/world').then((res) => res.json());
+  const sprites = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/sprites').then((res) => res.json());
+  const gameObjects = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/gameObjects').then((res) => res.json());
+  // const socket = io('https://jsprochat.herokuapp.com/');
+  const $form = document.getElementById('nameForm');
+  const $putName = document.getElementById('name');
+  const $startGame = document.querySelector('.start-game');
+
+  const $chatWrap = document.querySelector('.chat-wrap');
+
+  // const $chatForm = document.getElementById('form');
+  // const $chatInput = document.getElementById('input');
+  // const $message = document.querySelector('.message');
+
+  $startGame.style.display = 'flex';
+
+  const submitForm = (e) => {
+    e.preventDefault();
+
+    if ($putName.value) {
+      ClientGame.init({
+        tagId: 'game',
+        playerName: $putName.value,
+        world,
+        sprites,
+        gameObjects,
+        apiCfg: {
+          url: 'https://jsmarathonpro.herokuapp.com/',
+          path: '/game',
+        },
+        chatApiCfg: {
+          chatUrl: 'https://jsprochat.herokuapp.com/',
+          // form: $chatForm,
+          // chatInput: $chatInput,
+          // message: $message,
+        },
+      });
+
+      // socket.emit('start', $putName.value);
+
+      $chatWrap.style.display = 'block';
+
+      $form.removeEventListener('submit', submitForm);
+      $startGame.remove();
+      // form.remove();
+    }
+  };
+
+  $form.addEventListener('submit', submitForm);
+
+  // $chatForm.addEventListener('submit', (e) => {
+  //   e.preventDefault();
+
+  //   if ($chatInput) {
+  //     // socket.emit('chat message', $chatInput.value);
+  //     $chatInput.value = '';
+  //   }
+  // });
+
+  // socket.on('chat online', (data) => {
+  //   $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> сейчас online: <span style="color: blue">${data.online}<span></p>`);
+  // });
+
+  // const chId = socket.on('chat connection', (data) => {
+  //   $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> <span style="color: green">${data.msg}<span></p>`);
+  // });
+
+  // socket.on('chat message', (data) => {
+  //   if (chId.id === data.id) {
+  //     $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> <span style="color: purple">${data.name}: ${data.msg}</span></p>`);
+  //   } else {
+  //     $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> ${data.name}: ${data.msg}</p>`);
+  //   }
+  // });
+
+  // socket.on('chat disconnect', (data) => {
+  //   $message.insertAdjacentHTML('beforeend', `<p><strong>${getTime(data.time)}</strong> <span style="color: red">${data.msg}<span></p>`);
+  // });
 });
 // import terrainAtlas from './assets/terrain.png';
 // import worldCfg from './configs/world.json';

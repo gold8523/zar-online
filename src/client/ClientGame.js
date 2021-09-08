@@ -1,21 +1,35 @@
 import ClientEngine from './ClientEngine';
 import ClientWorld from './ClientWorld';
-import gameObjects from '../configs/gameObjects.json';
+// import gameObjects from '../configs/gameObjects.json';
+import ClientApi from './ClientApi';
+import ClientChatApi from './ClientChatApi';
 
-import sprites from '../configs/sprites';
-import levelCfg from '../configs/world.json';
+// import sprites from '../configs/sprites';
+// import levelCfg from '../configs/world.json';
 
 class ClientGame {
   constructor(cfg) {
     Object.assign(this, {
       cfg,
-      gameObjects,
+      gameObjects: cfg.gameObjects,
       player: null,
+      players: {},
+      api: new ClientApi({
+        game: this,
+        ...cfg.apiCfg,
+      }),
+      chatApi: new ClientChatApi({
+        chat: this,
+        ...cfg.chatApiCfg,
+      }),
+      spawnPoint: [],
     });
 
+    this.api.connect();
     this.engine = this.createEngine();
     this.map = this.createWorld();
     this.initEngine();
+    this.chatApi.connect();
   }
 
   setPlayer(player) {
@@ -29,7 +43,7 @@ class ClientGame {
 
   // создаем экземпляр класса мира и передаем контекст, движок, конфиг мира
   createWorld() {
-    return new ClientWorld(this, this.engine, levelCfg);
+    return new ClientWorld(this, this.engine, this.cfg.world);
   }
 
   // возвращаем экземпляр мира в метод moveTo() объекта movableObject
@@ -39,38 +53,91 @@ class ClientGame {
 
   // загружаем спрайты и запускаем отрисовку мира
   initEngine() {
-    this.engine.loadSprites(sprites).then(() => {
+    this.engine.loadSprites(this.cfg.sprites).then(() => {
       this.map.init();
       this.engine.on('render', (_, time) => {
-        this.engine.camera.focusAtGameObject(this.player);
+        // eslint-disable-next-line no-unused-expressions
+        this.player && this.engine.camera.focusAtGameObject(this.player);
         this.map.render(time);
       });
       // запускаем движок
       this.engine.start();
       this.initKeys();
+      this.engine.focus();
+      this.api.join(this.cfg.playerName);
     });
   }
 
-  moveMyChar(keyDown, dir) {
-    const { player } = this;
-    const dirs = {
-      left: [-1, 0],
-      right: [+1, 0],
-      up: [0, -1],
-      down: [0, +1],
-    };
+  setPlayers(playersList) {
+    playersList.forEach((player) => this.createPlayer(player));
+  }
 
-    if (player && player.motionProgress === 1) {
-      // eslint-disable-next-line arrow-body-style
-      const canMove = player.moveByCellCoord(dirs[dir][0], dirs[dir][1], (cell) => {
-        return cell.findObjectsByType('grass').length;
-      });
+  createCurrentPlayer(playerCfg) {
+    const playerObj = this.createPlayer(playerCfg);
 
-      if (canMove) {
-        player.setState(dir);
-        player.once('motion-stopped', () => player.setState('main'));
-      }
+    this.setPlayer(playerObj);
+  }
+
+  createPlayer({ id, col, row, layer, skin, name }) {
+    if (!this.players[id]) {
+      const cell = this.map.cellAt(col, row);
+      const playerObj = cell.createGameObject(
+        {
+          // eslint-disable-next-line quote-props
+          class: 'player',
+          type: skin,
+          playerId: id,
+          playerName: name,
+        },
+        layer,
+      );
+
+      cell.addGameObject(playerObj);
+
+      this.players[id] = playerObj;
     }
+
+    return this.players[id];
+  }
+
+  moveMyChar(keyDown, dir) {
+    this.api.move(dir);
+    // const { player } = this;
+    // const dirs = {
+    //   left: [-1, 0],
+    //   right: [+1, 0],
+    //   up: [0, -1],
+    //   down: [0, +1],
+    // };
+
+    // if (player && player.motionProgress === 1) {
+    //   // eslint-disable-next-line arrow-body-style
+    //   const canMove = player.moveByCellCoord(dirs[dir][0], dirs[dir][1], (cell) => {
+    //     return cell.findObjectsByType('grass').length;
+    //   });
+
+    //   if (canMove) {
+    //     player.setState(dir);
+    //     player.once('motion-stopped', () => player.setState('main'));
+    //   }
+    // }
+  }
+
+  getPlayerById(id) {
+    return this.players[id];
+  }
+
+  removePlayerById(id) {
+    const player = this.getPlayerById(id);
+
+    if (player) {
+      player.detouch();
+      delete this.players[id];
+    }
+  }
+
+  addSpawnPoint(spawnPoint) {
+    this.spawnPoint.push(spawnPoint);
   }
 
   initKeys() {

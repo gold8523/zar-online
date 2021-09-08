@@ -1,5 +1,6 @@
 import PositionedObject from '../common/PositionedObject';
 import ClientGameObject from './ClientGameObject';
+import ClientPlayer from './ClientPlayer';
 
 class ClientCell extends PositionedObject {
   constructor(cfg) {
@@ -15,6 +16,9 @@ class ClientCell extends PositionedObject {
         y: cellWidth * cfg.cellRow,
         width: cellWidth,
         height: cellHeight,
+        col: cfg.cellCol,
+        row: cfg.cellRow,
+        objectClasses: { player: ClientPlayer },
       },
       cfg,
     );
@@ -22,12 +26,33 @@ class ClientCell extends PositionedObject {
     this.initGameObjects();
   }
 
+  createGameObject(objCfg, layerId) {
+    let ObjectClass;
+    const { objectClasses } = this;
+
+    if (objCfg.class) {
+      ObjectClass = objectClasses[objCfg.class];
+    } else {
+      ObjectClass = ClientGameObject;
+    }
+
+    const obj = new ObjectClass({
+      cell: this,
+      objCfg,
+      layerId,
+    });
+
+    if (obj.type === 'spawn') {
+      this.world.game.addSpawnPoint(obj);
+    }
+
+    return obj;
+  }
+
   initGameObjects() {
     const { cellCfg } = this;
 
-    // this.objects = cellCfg[0].map((objCfg) => new ClientGameObject({ cell: this, objCfg }));
-    // eslint-disable-next-line no-return-assign
-    this.objects = cellCfg.map((layer, layerId) => layer.map((objCfg) => new ClientGameObject({ cell: this, objCfg, layerId })));
+    this.objects = cellCfg.map((layer, layerId) => layer.map((objCfg) => this.createGameObject(objCfg, layerId)));
   }
 
   render(time, layerId) {
